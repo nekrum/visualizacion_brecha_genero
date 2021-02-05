@@ -1,0 +1,19 @@
+---
+title: "Visualizacion Brecha"
+output: html_notebook
+---
+
+```{r setup}
+library(dplyr)
+library(curso.feminismo.datos)
+```
+
+
+
+```{r}
+str(brecha_data)
+```
+
+```{r}
+glimpse(brecha_data)
+```
