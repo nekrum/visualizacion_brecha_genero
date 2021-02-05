@@ -25,7 +25,7 @@ brecha_data %>%
     `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
     `Ingreso promedio por hora trabajada de la población ocupada de hombres`
   ) %>% 
-  group_by(`Entidad federativa`) %>% 
+  group_by(`Entidad federativa`) #%>% 
   summarise(
     ingresos_mujeres = mean(`Ingreso promedio por hora trabajada de la población ocupada de mujeres`),
     ingresos_hombres = mean(`Ingreso promedio por hora trabajada de la población ocupada de hombres`),
@@ -33,3 +33,43 @@ brecha_data %>%
     ingresos_hombres_sd = sd(`Ingreso promedio por hora trabajada de la población ocupada de hombres`)
   )
 ```
+
+```{r}
+brecha_data %>% 
+  select(
+    entidad = `Entidad federativa`,
+    ingreso_mujeres = `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
+    ingreso_hombres = `Ingreso promedio por hora trabajada de la población ocupada de hombres`
+  ) %>% 
+  group_by(entidad) %>% 
+  summarise(
+    ingresos_mujeres = mean(ingreso_mujeres),
+    ingresos_hombres = mean(ingreso_hombres),
+    ingresos_mujeres_sd = sd(ingreso_mujeres),
+    ingresos_hombres_sd = sd(ingreso_hombres)
+  )
+```
+
+```{r}
+brecha_data %>% 
+  select(
+    `Entidad federativa`,
+    `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
+    `Ingreso promedio por hora trabajada de la población ocupada de hombres`
+  ) %>% 
+  rename(
+    entidad = `Entidad federativa`,
+    ingreso_mujeres = `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
+    ingreso_hombres = `Ingreso promedio por hora trabajada de la población ocupada de hombres`
+  ) %>% 
+  group_by(entidad) %>% 
+  summarise(
+    ingresos_mujeres = mean(ingreso_mujeres),
+    ingresos_hombres = mean(ingreso_hombres),
+    ingresos_mujeres_sd = sd(ingreso_mujeres),
+    ingresos_hombres_sd = sd(ingreso_hombres)
+  )
+```
+
+
+
