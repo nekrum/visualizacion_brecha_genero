@@ -5,9 +5,9 @@ output: html_notebook
 
 ```{r setup}
 library(dplyr)
+library(ggplot2)
 library(curso.feminismo.datos)
 ```
-
 
 
 ```{r}
@@ -25,7 +25,7 @@ brecha_data %>%
     `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
     `Ingreso promedio por hora trabajada de la población ocupada de hombres`
   ) %>% 
-  group_by(`Entidad federativa`) #%>% 
+  group_by(`Entidad federativa`) %>% 
   summarise(
     ingresos_mujeres = mean(`Ingreso promedio por hora trabajada de la población ocupada de mujeres`),
     ingresos_hombres = mean(`Ingreso promedio por hora trabajada de la población ocupada de hombres`),
@@ -71,5 +71,36 @@ brecha_data %>%
   )
 ```
 
+## Guardar en una variable
 
+```{r}
+brecha_entidad <- brecha_data %>% 
+  select(
+    `Entidad federativa`,
+    `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
+    `Ingreso promedio por hora trabajada de la población ocupada de hombres`
+  ) %>% 
+  rename(
+    entidad = `Entidad federativa`,
+    ingreso_mujeres = `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
+    ingreso_hombres = `Ingreso promedio por hora trabajada de la población ocupada de hombres`
+  ) %>% 
+  group_by(entidad) %>% 
+  summarise(
+    ingresos_mujeres = mean(ingreso_mujeres),
+    ingresos_hombres = mean(ingreso_hombres),
+    ingresos_mujeres_sd = sd(ingreso_mujeres),
+    ingresos_hombres_sd = sd(ingreso_hombres)
+  )
+```
+
+# Graficar
+
+```{r}
+ggplot(brecha_entidad, aes(x=entidad, y = ingresos_mujeres, fill=entidad)) +
+  geom_col() +
+  geom_errorbar(aes(ymin = ingresos_mujeres - ingresos_mujeres_sd, ymax = ingresos_mujeres + ingresos_mujeres_sd)) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.position = "none")
+```
 
