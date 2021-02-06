@@ -6,6 +6,7 @@ output: html_notebook
 ```{r setup}
 library(dplyr)
 library(ggplot2)
+library(tidyr)
 library(curso.feminismo.datos)
 ```
 
@@ -106,8 +107,6 @@ ggplot(brecha_entidad, aes(x=entidad, y = ingresos_mujeres, fill=entidad)) +
 
 
 ```{r}
-library(tidyr)
-
 brecha_entidad_long <- brecha_entidad %>% pivot_longer(-entidad)
 brecha_entidad_long %>% 
   filter(name %in% c("ingresos_mujeres", "ingresos_hombres"), entidad %in% c("Durango", "Aguascalientes", "México")) %>% 
@@ -118,4 +117,25 @@ brecha_entidad_long %>%
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.position = "none")
 ```
 
+```{r}
+brecha_entidad_fecha <- brecha_data %>% 
+  select(
+    año = Periodo,
+    entidad = `Entidad federativa`,
+    ingreso_mujeres = `Ingreso promedio por hora trabajada de la población ocupada de mujeres`,
+    ingreso_hombres = `Ingreso promedio por hora trabajada de la población ocupada de hombres`
+  ) %>% 
+  pivot_longer(cols = ingreso_mujeres:ingreso_hombres, names_to = "ingresos", values_to="media_ingreso_hora")
+```
+
+
+```{r fig.width=12, fig.height=12}
+ggplot(brecha_entidad_fecha, aes( x = año, y = media_ingreso_hora, color = ingresos)) +
+  geom_line() +
+  geom_point() +
+  facet_wrap(~ entidad, nrow = 7, ncol = 5) +
+  labs(title = "Brecha de Genero", x = "", y = "Media de pesos por hora") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+```
 
