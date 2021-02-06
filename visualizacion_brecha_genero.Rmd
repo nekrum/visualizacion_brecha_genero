@@ -104,3 +104,16 @@ ggplot(brecha_entidad, aes(x=entidad, y = ingresos_mujeres, fill=entidad)) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1), legend.position = "none")
 ```
 
+
+```{r}
+library(tidyr)
+
+brecha_entidad_long <- brecha_entidad %>% pivot_longer(-entidad)
+brecha_entidad_long %>% 
+  filter(name %in% c("ingresos_mujeres", "ingresos_hombres"), entidad %in% c("Durango", "Aguascalientes", "México")) %>% 
+  ggplot(aes(x = name, y = value, fill=name)) +
+    geom_col() +
+    facet_grid(.~entidad)
+```
+
+
